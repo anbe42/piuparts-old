@@ -806,7 +806,7 @@ class Chroot:
             self.terminate_running_processes()
             if not settings.schroot:
                 self.unmount_selinux()
-                self.unmount_proc()
+                self.unmount_all()
             if settings.lvm_volume:
                 logging.debug('Unmounting and removing LVM snapshot %s' % self.lvm_snapshot_name)
                 run(['umount', self.name])
@@ -815,6 +815,9 @@ class Chroot:
                 logging.debug("Terminate schroot session '%s'" % self.name)
                 run(['schroot', '--end-session', '--chroot', "session:" + self.schroot_session])
             if not settings.schroot:
+              if self.get_mounted():
+                logging.error("Can't remove directory tree at %s, the following directories are still mounted: %s" % (self.name, " ".join(self.get_mounted())))
+              else:
                 run(['rm', '-rf', '--one-file-system', self.name])
                 if os.path.exists(self.name):
                     create_file(os.path.join(self.name, ".piuparts.tmpdir"), "removal failed")
@@ -1366,6 +1369,24 @@ class Chroot:
         self.run(["umount", "/proc"], ignore_errors=True)
         for bindmount in settings.bindmounts:
             run(["umount", self.relative(bindmount)], ignore_errors=True)
+
+    def get_mounted(self):
+        mounts = []
+        proc_mounts = open("/proc/mounts", "r")
+        try:
+            for line in proc_mounts:
+                mountpoint = line.split()[1]
+                if mountpoint[:len(self.name) + 1] == self.name + "/":
+                    mounts.append(mountpoint[len(self.name):])
+        finally:
+            proc_mounts.close()
+        mounts.reverse()
+        return mounts
+
+    def unmount_all(self):
+        """Unmount everything inside chroot."""
+        for mountpoint in self.get_mounted():
+            self.run(["umount", mountpoint], ignore_errors=True)
 
     def is_ignored(self, pathname):
         """Is a file (or dir or whatever) to be ignored?"""
