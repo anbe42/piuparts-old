@@ -23,6 +23,7 @@ import os
 import time
 import re
 import subprocess
+from collections import namedtuple
 
 CONFIG_FILE = "/etc/piuparts/piuparts.conf"
 KPR_DIRS = ( 'pass', 'bugged', 'affected', 'fail' )
@@ -80,9 +81,58 @@ class Problem():
 
         self.WHERE = self.WHERE.split(" ")
 
+
+class FailureManager():
+    """Class to track known failures encountered, by package,
+       where (e.g. 'fail'), and known problem type"""
+
+    def __init__(self, logdict):
+        """logdict is {pkgspec: fulllogpath} across all log files"""
+
+        self.logdict = logdict
+        self.failures = []
+
+        self.load_failures()
+
+    def load_failures(self):
+        """Collect failures across all kpr files, as named tuples"""
+
+        for pkgspec in self.logdict:
+            logpath = self.logdict[pkgspec]
+            try:
+                kp = open( get_kpr_path(logpath), 'r' )
+
+                for line in kp.readlines():
+                    (where, problem) = self.parse_kpr_line( line )
+
+                    self.failures.append( make_failure(where, problem, pkgspec) )
+
+                kp.close()
+            except IOError:
+                print "Error processing %s" % get_kpr_path(logpath)
+
+    def parse_kpr_line( self, line ):
+        """Parse a line in a kpr file into where (e.g. 'pass') and problem name"""
+
+        m = re.search( "^([a-z]+)/.+ (.+)$", line )
+        return( m.group(1), m.group(2) )
+
+    def sort_by_path( self ):
+        self.failures.sort(key=lambda x: self.logdict[x.pkgspec])
+
+    def filtered( self, problem ):
+        return([x for x in self.failures if problem==x.problem])
+
+def make_failure( where, problem, pkgspec ):
+    return(namedtuple('Failure', 'where problem pkgspec')(where, problem, pkgspec))
+
 def get_where( logpath ):
     """Convert a path to a log file to the 'where' component (e.g. 'pass')"""
     return( logpath.split('/')[-2] )
+
+def get_kpr_path( logpath ):
+    """Return the kpr file path for a particular log path"""
+    return( logpath[:-4] + KPR_EXT )
 
 def get_file_dict( workdirs, ext ):
     """For files in [workdirs] with extension 'ext', create a dict of
@@ -113,6 +163,9 @@ def process_section( section, config, problem_list ):
             for x in [LOG_EXT, KPR_EXT, BUG_EXT] ]
 
     (kprdict, bugdict) = [get_file_dict(workdirs,x) for x in [KPR_EXT, BUG_EXT]]
+
+    failures = FailureManager( logdict )
+    failures.sort_by_path()
 
 def detect_well_known_errors( config, problem_list ):
 
