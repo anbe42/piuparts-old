@@ -27,6 +27,7 @@ KPR_DIRS = ( 'pass', 'bugged', 'affected', 'fail' )
 
 KPR_EXT = '.kpr'
 BUG_EXT = '.bug'
+LOG_EXT = '.log'
 
 class WKE_Config( piupartslib.conf.Config ):
     """Configuration parameters for Well Known Errors"""
@@ -40,6 +41,20 @@ class WKE_Config( piupartslib.conf.Config ):
                 "master-directory": "/var/lib/piuparts/master/",
             }, "" )
 
+def get_file_dict( workdirs, ext ):
+    """For files in [workdirs] with extension 'ext', create a dict of
+       <pkgname>_<version>: <path>"""
+
+    filedict = {}
+
+    for dir in workdirs:
+        for fl in os.listdir(dir):
+            if os.path.splitext(fl)[1] == ext:
+                filedict[os.path.splitext(os.path.basename(fl))[0]] \
+                    = os.path.join(dir,fl)
+
+    return filedict
+
 def process_section( section, config ):
     """ Update .bug and .kpr files for logs in this section """
 
@@ -50,6 +65,9 @@ def process_section( section, config ):
         return
 
     [os.mkdir(x) for x in workdirs if not os.path.exists(x)]
+
+    (logdict, kprdict, bugdict) = [ get_file_dict(workdirs, x ) \
+            for x in [LOG_EXT, KPR_EXT, BUG_EXT] ]
 
 def detect_well_known_errors( config ):
 
