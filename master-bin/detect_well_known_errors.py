@@ -80,6 +80,10 @@ class Problem():
 
         self.WHERE = self.WHERE.split(" ")
 
+def get_where( logpath ):
+    """Convert a path to a log file to the 'where' component (e.g. 'pass')"""
+    return( logpath.split('/')[-2] )
+
 def get_file_dict( workdirs, ext ):
     """For files in [workdirs] with extension 'ext', create a dict of
        <pkgname>_<version>: <path>"""
@@ -107,6 +111,8 @@ def process_section( section, config, problem_list ):
 
     (logdict, kprdict, bugdict) = [ get_file_dict(workdirs, x ) \
             for x in [LOG_EXT, KPR_EXT, BUG_EXT] ]
+
+    (kprdict, bugdict) = [get_file_dict(workdirs,x) for x in [KPR_EXT, BUG_EXT]]
 
 def detect_well_known_errors( config, problem_list ):
 
