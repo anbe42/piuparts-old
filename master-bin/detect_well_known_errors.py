@@ -35,7 +35,7 @@ TPL_EXT = '.tpl'
 
 PROB_TPL = \
 """<table class="righttable"><tr class="titlerow"><td class="titlecell">
-$HEADER in $SECTION
+$HEADER in $SECTION, sorted by reverse dependency count.
 </td></tr><tr class="normalrow"><td class="contentcell2">
 $HELPTEXT
 <p>The commandline to find these logs is: <pre>
@@ -49,7 +49,7 @@ $PACKAGE_LIST</ul>
 
 UNKNOWN_TPL = \
 """<table class="righttable"><tr class="titlerow"><td class="titlecell">
-Packages with unknown failures detected in $SECTION
+Packages with unknown failures detected in $SECTION, sorted by reverse dependency count.
 </td></tr><tr class="normalrow"><td class="contentcell2">
 <p>Please investigate and improve detection of known error types!</p>
 </td></tr><tr class="titlerow"><td class="alerttitlecell">Please file bugs!</td></tr><tr class="normalrow"><td class="contentcell2" colspan="3">
@@ -60,7 +60,7 @@ $PACKAGE_LIST
 """
 
 PKG_ERROR_TPL = \
-"""<li><a href=\"$LOG\">$LOG</a>
+"""<li>$RDEPS - <a href=\"$LOG\">$LOG</a>
     (<a href=\"http://bugs.debian.org/$PACKAGE?dist=unstable\" target=\"_blank\">BTS</a>)
 $BUG</li>
 """
@@ -239,7 +239,7 @@ def populate_tpl( tmpl, vals ):
 
     return tmpl
 
-def update_tpl( basedir, section, problem, failures, logdict, ftpl, ptpl ):
+def update_tpl( basedir, section, problem, failures, logdict, ftpl, ptpl, pkgsdb ):
 
     pkg_text = ""
     for failure in failures:
@@ -248,6 +248,7 @@ def update_tpl( basedir, section, problem, failures, logdict, ftpl, ptpl ):
                                 'LOG': section_path(logdict[failure.pkgspec]),
                                 'PACKAGE': failure.pkgspec.split('_')[0],
                                 'BUG': get_bug_text(logdict[failure.pkgspec]),
+                                'RDEPS': pkgsdb.get_package(failure.pkgspec.split('_')[0]).rrdep_count()
                                    } )
 
     if len(pkg_text):
@@ -264,7 +265,7 @@ def update_tpl( basedir, section, problem, failures, logdict, ftpl, ptpl ):
         pf.write( tpl_text )
         pf.close()
 
-def update_html( section, logdict, problem_list, failures, config ):
+def update_html( section, logdict, problem_list, failures, config, pkgsdb ):
 
     html_dir = os.path.join( config['output-directory'], section )
     if not os.path.exists( html_dir ):
@@ -274,7 +275,7 @@ def update_html( section, logdict, problem_list, failures, config ):
         update_tpl( html_dir, section, problem,
                     failures.filtered(problem.name),
                     logdict,
-                    PKG_ERROR_TPL, PROB_TPL )
+                    PKG_ERROR_TPL, PROB_TPL, pkgsdb )
 
     # Make a failure list of all failed packages that don't show up as known
     failedpkgs = set([x for x in logdict.keys()
@@ -295,7 +296,7 @@ def update_html( section, logdict, problem_list, failures, config ):
 
     update_tpl( html_dir, section, problem_list[0], unknownsasfailures,
                 logdict,
-                PKG_ERROR_TPL, UNKNOWN_TPL, )
+                PKG_ERROR_TPL, UNKNOWN_TPL, pkgsdb )
 
 def process_section( section, config, problem_list, pkgsdb=None ):
     """ Update .bug and .kpr files for logs in this section """
@@ -334,7 +335,7 @@ def process_section( section, config, problem_list, pkgsdb=None ):
     failures = FailureManager( logdict )
     failures.sort_by_rdeps(pkgsdb)
 
-    update_html( section, logdict, problem_list, failures, config )
+    update_html( section, logdict, problem_list, failures, config, pkgsdb )
 
 def detect_well_known_errors( config, problem_list ):
 
