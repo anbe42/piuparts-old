@@ -61,6 +61,7 @@ $PACKAGE_LIST
 
 PKG_ERROR_TPL = \
 """<li>$RDEPS - <a href=\"$LOG\">$LOG</a>
+    (<a href=\"http://packages.qa.debian.org/$SDIR/$SPKG.html\">PTS</a>)
     (<a href=\"http://bugs.debian.org/$PACKAGE?dist=unstable\" target=\"_blank\">BTS</a>)
 $BUG</li>
 """
@@ -195,6 +196,17 @@ def get_kpr_path( logpath ):
     """Return the kpr file path for a particular log path"""
     return( logpath[:-4] + KPR_EXT )
 
+def pts_subdir( source ):
+    if source[:3] == "lib":
+      return source[:4]
+    else:
+      return source[:1]
+
+def source_pkg( pkgspec, db ):
+    source_name = db.get_control_header(get_pkg(pkgspec), "Source")
+
+    return( source_name )
+
 def get_file_dict( workdirs, ext ):
     """For files in [workdirs] with extension 'ext', create a dict of
        <pkgname>_<version>: <path>"""
@@ -216,6 +228,9 @@ def get_pkgspec( logpath ):
 def replace_ext( fpath, newext ):
     basename = os.path.splitext( os.path.split(fpath)[1] )[0]
     return('/'.join( fpath.split('/')[:-1] + [basename + newext] ))
+
+def get_pkg( pkgspec ):
+    return( pkgspec.split('_')[0] )
 
 def get_bug_text(logpath):
     bugpath = replace_ext(logpath, BUG_EXT)
@@ -244,11 +259,22 @@ def update_tpl( basedir, section, problem, failures, logdict, ftpl, ptpl, pkgsdb
     pkg_text = ""
     for failure in failures:
 
-            pkg_text += populate_tpl(ftpl, {
-                                'LOG': section_path(logdict[failure.pkgspec]),
-                                'PACKAGE': failure.pkgspec.split('_')[0],
-                                'BUG': get_bug_text(logdict[failure.pkgspec]),
-                                'RDEPS': pkgsdb.get_package(failure.pkgspec.split('_')[0]).rrdep_count()
+        pkgspec = failure.pkgspec
+        bin_pkg = get_pkg(pkgspec)
+        try:
+            src_pkg = source_pkg(pkgspec, pkgsdb)
+            rdep_cnt = pkgsdb.get_package(bin_pkg).rrdep_count()
+        except KeyError:
+            src_pkg = bin_pkg
+            rdep_cnt = 0
+
+        pkg_text += populate_tpl(ftpl, {
+                                'LOG': section_path(logdict[pkgspec]),
+                                'PACKAGE': bin_pkg,
+                                'BUG': get_bug_text(logdict[pkgspec]),
+                                'RDEPS': rdep_cnt,
+                                'SDIR':pts_subdir(src_pkg),
+                                'SPKG':src_pkg,
                                    } )
 
     if len(pkg_text):
