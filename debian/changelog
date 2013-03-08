@@ -52,7 +52,9 @@ piuparts (0.50) UNRELEASED; urgency=low
     - Use piuparts.conf global proxy setting as http_proxy.
     - Use distros.conf to compute URLs.
     - Load depends-sections for package lookup in partial distros.
-  * Rename piuparts-master.py to piuparts-master-backend.py
+  * Rename piuparts-master.py to piuparts-master-backend.py and add a shell
+    wrapper script piuparts-master to simplify calling the master from the
+    slave.
   * piuparts-slave.py:
     - Tarball recreation can be disabled by setting max-tgz-age to 0.
     - Relax package existence checks to allow distupgrading to backports.
