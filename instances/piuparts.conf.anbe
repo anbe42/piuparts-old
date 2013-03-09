@@ -48,6 +48,7 @@ sections =
 	squeeze2wheezy/main
 	squeeze2wheezy-pu/main
 	squeeze2wheezyTEST/main
+	squeeze2wheezyTESTj8/main
 	squeeze2wheezy-apt/main
 	squeeze2wheezy-apt2/main
 	squeeze2wheezy-iri/main
@@ -899,6 +900,22 @@ piuparts-flags =
 	--distupgrade-to-testdebs
 	--scriptsdir /etc/piuparts/scripts-debug-problemresolver
 	-i /usr/share/doc/gcc-4.7-base/changelog.Debian.gz
+arch = amd64
+area = main
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
+
+[squeeze2wheezyTESTj8/main]
+precedence = 50
+description = + Wheezy has been enhanced with some modified packages.
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	--do-not-verify-signatures
+	--bindmount /tmp/j8
+	--testdebs-repo /tmp/j8
+	--distupgrade-to-testdebs
+	--scriptsdir /etc/piuparts/scripts-debug-problemresolver
 arch = amd64
 area = main
 distro = squeeze
