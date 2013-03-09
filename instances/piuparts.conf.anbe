@@ -17,12 +17,15 @@ sections =
 	sid/main
 	sid-lo/main
 	sid-bl/main
+	wheezy/main
 #
 	sid/contrib
 	sid-lo/contrib
+	wheezy/contrib
 #
 	sid/non-free
 	sid-lo/non-free
+	wheezy/non-free
 #
 proxy = http://localhost:3128
 #
@@ -147,6 +150,41 @@ piuparts-flags =
 distro = sid
 area = main
 arch = amd64
+
+
+[wheezy/main]
+precedence = 10
+piuparts-flags =
+	%(flags-default)s
+distro = wheezy
+arch = amd64
+area = main
+# 60*60*24*7
+max-tgz-age = 604800
+reschedule-old-days = 30
+expire-old-days = 45
+
+[wheezy/contrib]
+precedence = 45
+piuparts-flags =
+	%(flags-default)s
+depends-sections = wheezy/main wheezy/non-free
+distro = wheezy
+arch = amd64
+area = contrib
+reschedule-old-days = 30
+expire-old-days = 45
+
+[wheezy/non-free]
+precedence = 45
+piuparts-flags =
+	%(flags-default)s
+depends-sections = wheezy/main wheezy/contrib
+distro = wheezy
+arch = amd64
+area = non-free
+reschedule-old-days = 30
+expire-old-days = 45
 
 
 ############################################################################
