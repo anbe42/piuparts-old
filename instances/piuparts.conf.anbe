@@ -41,6 +41,7 @@ sections =
 	squeeze-backports/main
 	squeeze2pu/main
 	squeeze2pu2wheezy/main
+	squeeze2wheezy/main
 	lenny/main
 	lenny2squeeze/main
 #
@@ -56,6 +57,7 @@ sections =
 	squeeze-backports/contrib
 	squeeze2pu/contrib
 	squeeze2pu2wheezy/contrib
+	squeeze2wheezy/contrib
 	lenny/contrib
 	lenny2squeeze/contrib
 #
@@ -71,6 +73,7 @@ sections =
 	squeeze-backports/non-free
 	squeeze2pu/non-free
 	squeeze2pu2wheezy/non-free
+	squeeze2wheezy/non-free
 	lenny/non-free
 	lenny2squeeze/non-free
 #
@@ -632,4 +635,44 @@ distro = squeeze-proposed-updates
 arch = amd64
 area = non-free
 upgrade-test-distros = squeeze squeeze-proposed-updates wheezy
+
+
+[squeeze2wheezy/main]
+precedence = 60
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	--scriptsdir /etc/piuparts/scripts-debug-problemresolver
+arch = amd64
+area = main
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
+reschedule-old-days = 30
+expire-old-days = 45
+
+[squeeze2wheezy/contrib]
+precedence = 95
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+depends-sections = squeeze2wheezy/main squeeze2wheezy/non-free
+arch = amd64
+area = contrib
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
+reschedule-old-days = 30
+expire-old-days = 45
+
+[squeeze2wheezy/non-free]
+precedence = 95
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+depends-sections = squeeze2wheezy/main squeeze2wheezy/contrib
+arch = amd64
+area = non-free
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
+reschedule-old-days = 30
+expire-old-days = 45
 
