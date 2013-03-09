@@ -78,6 +78,8 @@ piuparts (0.50) UNRELEASED; urgency=low
     - Pass the section to piuparts-master via stdin instead of using a command
       line argument.
     - Let the piuparts-master (wrapper script) handle chdir and error logging.
+    - Support empty master-command if the command is set in master's
+      .ssh/authorized_keys file.
   * piuparts-analyze.py:
     - Add support for magic "$DISTRO/None" versions.
   * piuparts-report.py:

@@ -531,6 +531,8 @@ section, too, and will serve as defaults for all other sections
  the master. When the master has been installed from the Debian
  package, the command is
  '/usr/share/piuparts/piuparts-master'.
+ This does not need to be set here if it is already set in
+ '.ssh/authorized_keys' to limit ssh access to that single command.
 
 * "idle-sleep" is the length of time the slave should wait before
  querying the master again if the master didn't have any new

@@ -186,6 +186,8 @@ class Slave:
         self._master_user = user
 
     def set_master_command(self, cmd):
+        if cmd is None:
+            cmd = "set-in-authorized_keys"
         logging.debug("Setting master command to %s" % cmd)
         self._master_command = cmd
 
