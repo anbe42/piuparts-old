@@ -1,0 +1,90 @@
+#!/bin/sh
+set -e
+
+# Copyright © 2013 Andreas Beckmann <debian@abeckmann.de>
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+
+###GET_CONFIG_VALUE###
+
+get_config_value PIUPARTS_PREFIX global prefix /usr
+get_config_value SLAVEROOT global slave-directory
+get_config_value SLAVECOUNT global slave-count 2
+
+
+export PYTHONPATH=$PIUPARTS_PREFIX/lib/python2.6/dist-packages:$PIUPARTS_PREFIX/lib/python2.7/dist-packages
+
+SESSIONNAME=piuparts_slave_screen
+
+start_a_slave()
+{
+	SLAVENUM=${1:-0}
+
+	mkdir -p $SLAVENUM
+	SLAVEDIR=$(readlink -f $SLAVENUM)
+
+	#HACK
+	test -d $SLAVEDIR/basetgz || ln -s ../basetgz $SLAVEDIR/basetgz
+
+	# Ensure the screen session exists.
+	DUMMY=
+	if ! pgrep -f "SCREEN.*$SESSIONNAME" >/dev/null ; then
+		DUMMY=0
+		screen -S $SESSIONNAME -d -m
+		echo "Started screen session '$SESSIONNAME'."
+		if [ $SLAVENUM = 0 ]; then
+			DUMMY=39
+			screen -S $SESSIONNAME -X screen $DUMMY
+			screen -S $SESSIONNAME -p 0 -X kill
+		fi
+	fi
+
+	# Ensure there is a window for this slave.
+	screen -S $SESSIONNAME -X screen -t slave$SLAVENUM -L $SLAVENUM
+
+	# Cleanup dummy window.
+	if [ -n "$DUMMY" ]; then
+		screen -S $SESSIONNAME -p $DUMMY -X kill
+
+		# remove screen logs to preserve slave_join logic
+		sleep 1
+		rm -f screenlog.*
+	fi
+
+	# Launch the slave.
+	screen -S $SESSIONNAME -p $SLAVENUM -X stuff "
+cd $SLAVEDIR && $PIUPARTS_PREFIX/share/piuparts/piuparts-slave
+"
+
+	echo "piuparts-slave $SLAVENUM has been started."
+}
+
+
+mkdir -p $SLAVEROOT
+cd $SLAVEROOT
+
+case "$1" in
+	all|All|ALL)
+		SLAVES=$(seq 0 $((SLAVECOUNT - 1))) ;;
+	*)
+		SLAVES=$(echo "$1" | tr -c -d 0-9) ;;
+esac
+
+SLAVES=${SLAVES:-0}
+
+for s in $SLAVES ; do
+	start_a_slave $s
+done
