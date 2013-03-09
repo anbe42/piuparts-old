@@ -50,6 +50,7 @@ sections =
 	squeeze2wheezyTEST/main
 	squeeze2wheezy-apt/main
 	squeeze2wheezy-apt2/main
+	squeeze2wheezy-iri/main
 	squeeze2bpo2wheezy/main
 	squeeze2wheezy2sid/main
 	squeeze2sid/main
@@ -77,6 +78,7 @@ sections =
 	squeeze2pu2wheezy/contrib
 	squeeze2wheezy/contrib
 	squeeze2wheezy-pu/contrib
+	squeeze2wheezy-iri/contrib
 	squeeze2bpo2wheezy/contrib
 	squeeze2wheezy2sid/contrib
 	squeeze2sid/contrib
@@ -104,6 +106,7 @@ sections =
 	squeeze2pu2wheezy/non-free
 	squeeze2wheezy/non-free
 	squeeze2wheezy-pu/non-free
+	squeeze2wheezy-iri/non-free
 	squeeze2bpo2wheezy/non-free
 	squeeze2wheezy2sid/non-free
 	squeeze2sid/non-free
@@ -988,6 +991,45 @@ area = non-free
 upgrade-test-distros = squeeze wheezy-proposed-updates
 reschedule-old-days = 30
 expire-old-days = 45
+
+
+[squeeze2wheezy-iri/main]
+precedence = 90
+description = Debian %(area)s: package installation and removal in squeeze, then upgrade to wheezy, installation, removal, and purge test.
+piuparts-flags =
+	--install-remove-install
+	%(flags-default)s
+	%(flags-start-squeeze)s
+arch = amd64
+area = main
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
+
+[squeeze2wheezy-iri/contrib]
+precedence = 95
+description = Debian %(area)s: package installation and removal in squeeze, then upgrade to wheezy, installation, removal, and purge test.
+piuparts-flags =
+	--install-remove-install
+	%(flags-default)s
+	%(flags-start-squeeze)s
+depends-sections = squeeze2wheezy-iri/main squeeze2wheezy-iri/non-free
+arch = amd64
+area = contrib
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
+
+[squeeze2wheezy-iri/non-free]
+precedence = 95
+description = Debian %(area)s: package installation and removal in squeeze, then upgrade to wheezy, installation, removal, and purge test.
+piuparts-flags =
+	--install-remove-install
+	%(flags-default)s
+	%(flags-start-squeeze)s
+depends-sections = squeeze2wheezy-iri/main squeeze2wheezy-iri/contrib
+arch = amd64
+area = non-free
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
 
 
 [squeeze2bpo2wheezy/main]
