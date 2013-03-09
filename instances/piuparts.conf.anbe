@@ -35,6 +35,7 @@ sections =
 	sid-iri/main
 	sid-ipi/main
 	wheezy/main
+	wheezy-ipi/main
 	wheezy-pu/main
 	squeeze/main
 	squeeze-security/main
@@ -63,6 +64,7 @@ sections =
 	sid-iri/contrib
 	sid-ipi/contrib
 	wheezy/contrib
+	wheezy-ipi/contrib
 	wheezy-pu/contrib
 	squeeze/contrib
 	squeeze-security/contrib
@@ -88,6 +90,7 @@ sections =
 	sid-iri/non-free
 	sid-ipi/non-free
 	wheezy/non-free
+	wheezy-ipi/non-free
 	wheezy-pu/non-free
 	squeeze/non-free
 	squeeze-security/non-free
@@ -617,6 +620,42 @@ depends-sections = sid-ipi/main sid-ipi/contrib
 distro = sid
 area = non-free
 arch = amd64
+
+
+[wheezy-ipi/main]
+precedence = 195
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, installation, removal, and purge test.
+piuparts-flags =
+	--install-purge-install
+	--install-remove-install
+	%(flags-default)s
+distro = wheezy
+arch = amd64
+area = main
+
+[wheezy-ipi/contrib]
+precedence = 195
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, installation, removal, and purge test.
+piuparts-flags =
+	--install-purge-install
+	--install-remove-install
+	%(flags-default)s
+depends-sections = wheezy-ipi/main wheezy-ipi/non-free
+distro = wheezy
+arch = amd64
+area = contrib
+
+[wheezy-ipi/non-free]
+precedence = 195
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, installation, removal, and purge test.
+piuparts-flags =
+	--install-purge-install
+	--install-remove-install
+	%(flags-default)s
+depends-sections = wheezy-ipi/main wheezy-ipi/contrib
+distro = wheezy
+arch = amd64
+area = non-free
 
 
 ############################################################################
