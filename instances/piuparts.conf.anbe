@@ -18,14 +18,17 @@ sections =
 	sid-lo/main
 	sid-bl/main
 	wheezy/main
+	wheezy-pu/main
 #
 	sid/contrib
 	sid-lo/contrib
 	wheezy/contrib
+	wheezy-pu/contrib
 #
 	sid/non-free
 	sid-lo/non-free
 	wheezy/non-free
+	wheezy-pu/non-free
 #
 proxy = http://localhost:3128
 #
@@ -185,6 +188,34 @@ arch = amd64
 area = non-free
 reschedule-old-days = 30
 expire-old-days = 45
+
+
+[wheezy-pu/main]
+precedence = 20
+piuparts-flags =
+	%(flags-default)s
+depends-sections = wheezy/main
+distro = wheezy-proposed-updates
+arch = amd64
+area = main
+
+[wheezy-pu/contrib]
+precedence = 45
+piuparts-flags =
+	%(flags-default)s
+depends-sections = wheezy/main wheezy/non-free
+distro = wheezy-proposed-updates
+arch = amd64
+area = contrib
+
+[wheezy-pu/non-free]
+precedence = 45
+piuparts-flags =
+	%(flags-default)s
+depends-sections = wheezy/main wheezy/contrib
+distro = wheezy-proposed-updates
+arch = amd64
+area = non-free
 
 
 ############################################################################
