@@ -52,6 +52,7 @@ sections =
 	sid2experimental/main
 	lenny/main
 	lenny2squeeze/main
+	len2squ2whe/main
 #
 	experimental/contrib
 	sid/contrib
@@ -73,6 +74,7 @@ sections =
 	sid2experimental/contrib
 	lenny/contrib
 	lenny2squeeze/contrib
+	len2squ2whe/contrib
 #
 	experimental/non-free
 	sid/non-free
@@ -94,6 +96,7 @@ sections =
 	sid2experimental/non-free
 	lenny/non-free
 	lenny2squeeze/non-free
+	len2squ2whe/non-free
 #
 proxy = http://localhost:3128
 #
@@ -575,6 +578,42 @@ arch = amd64
 area = non-free
 distro = lenny
 upgrade-test-distros = lenny squeeze
+reschedule-old-count = 0
+
+
+[len2squ2whe/main]
+precedence = 120
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-lenny)s
+arch = amd64
+area = main
+distro = lenny
+upgrade-test-distros = lenny squeeze wheezy
+reschedule-old-count = 0
+
+[len2squ2whe/contrib]
+precedence = 120
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-lenny)s
+depends-sections = len2squ2whe/main len2squ2whe/non-free
+arch = amd64
+area = contrib
+distro = lenny
+upgrade-test-distros = lenny squeeze wheezy
+reschedule-old-count = 0
+
+[len2squ2whe/non-free]
+precedence = 120
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-lenny)s
+depends-sections = len2squ2whe/main len2squ2whe/contrib
+arch = amd64
+area = non-free
+distro = lenny
+upgrade-test-distros = lenny squeeze wheezy
 reschedule-old-count = 0
 
 
