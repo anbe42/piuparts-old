@@ -40,6 +40,7 @@ sections =
 	squeeze-pu/main
 	squeeze-backports/main
 	lenny/main
+	lenny2squeeze/main
 #
 	experimental/contrib
 	sid/contrib
@@ -52,6 +53,7 @@ sections =
 	squeeze-pu/contrib
 	squeeze-backports/contrib
 	lenny/contrib
+	lenny2squeeze/contrib
 #
 	experimental/non-free
 	sid/non-free
@@ -64,6 +66,7 @@ sections =
 	squeeze-pu/non-free
 	squeeze-backports/non-free
 	lenny/non-free
+	lenny2squeeze/non-free
 #
 proxy = http://localhost:3128
 #
@@ -500,4 +503,50 @@ reschedule-old-count = 0
 ############################################################################
 ###  Install, distupgrade, remove, and purge tests.                      ###
 ############################################################################
+
+
+[lenny2squeeze/main]
+precedence = 110
+piuparts-flags =
+	--warn-on-debsums-errors
+	%(flags-default)s
+	%(flags-start-lenny)s
+	%(flags-end-squeeze)s
+	-i /usr/local/share/octave/
+	-i /usr/local/share/octave/site-m/
+	-i /usr/share/octave/ls-R
+	-i /usr/share/octave/packages/
+arch = amd64
+area = main
+distro = lenny
+upgrade-test-distros = lenny squeeze
+reschedule-old-count = 0
+
+[lenny2squeeze/contrib]
+precedence = 110
+piuparts-flags =
+	--warn-on-debsums-errors
+	%(flags-default)s
+	%(flags-start-lenny)s
+	%(flags-end-squeeze)s
+depends-sections = lenny2squeeze/main lenny2squeeze/non-free
+arch = amd64
+area = contrib
+distro = lenny
+upgrade-test-distros = lenny squeeze
+reschedule-old-count = 0
+
+[lenny2squeeze/non-free]
+precedence = 110
+piuparts-flags =
+	--warn-on-debsums-errors
+	%(flags-default)s
+	%(flags-start-lenny)s
+	%(flags-end-squeeze)s
+depends-sections = lenny2squeeze/main lenny2squeeze/contrib
+arch = amd64
+area = non-free
+distro = lenny
+upgrade-test-distros = lenny squeeze
+reschedule-old-count = 0
 
