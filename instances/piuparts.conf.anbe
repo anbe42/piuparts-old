@@ -45,6 +45,7 @@ sections =
 	squeeze2wheezy-pu/main
 	squeeze2wheezyTEST/main
 	squeeze2wheezy-apt/main
+	squeeze2wheezy-apt2/main
 	lenny/main
 	lenny2squeeze/main
 #
@@ -681,6 +682,20 @@ piuparts-flags =
 	--scriptsdir /etc/piuparts/scripts-debug-problemresolver
 	--bindmount /tmp/apt4squeeze
 	--scriptsdir /etc/piuparts/scripts-apt-first
+arch = amd64
+area = main
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
+
+[squeeze2wheezy-apt2/main]
+precedence = 50
+description = + Using a backported and patched apt from wheezy to perform the upgrade.
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	--scriptsdir /etc/piuparts/scripts-debug-problemresolver
+	--bindmount /tmp/apt4squeeze
+	--scriptsdir /etc/piuparts/scripts-apt-first2
 arch = amd64
 area = main
 distro = squeeze
