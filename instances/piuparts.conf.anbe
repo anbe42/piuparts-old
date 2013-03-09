@@ -26,6 +26,7 @@ sections =
 	wheezy/main
 	wheezy-pu/main
 	squeeze/main
+	squeeze-security/main
 #
 	experimental/contrib
 	sid/contrib
@@ -33,6 +34,7 @@ sections =
 	wheezy/contrib
 	wheezy-pu/contrib
 	squeeze/contrib
+	squeeze-security/contrib
 #
 	experimental/non-free
 	sid/non-free
@@ -40,6 +42,7 @@ sections =
 	wheezy/non-free
 	wheezy-pu/non-free
 	squeeze/non-free
+	squeeze-security/non-free
 #
 proxy = http://localhost:3128
 #
@@ -297,6 +300,40 @@ piuparts-flags =
 	%(flags-end-squeeze)s
 depends-sections = squeeze/main squeeze/contrib
 distro = squeeze
+arch = amd64
+area = non-free
+
+
+[squeeze-security/main]
+precedence = 20
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main
+distro = squeeze/updates
+arch = amd64
+area = main
+
+[squeeze-security/contrib]
+precedence = 45
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main
+distro = squeeze/updates
+arch = amd64
+area = contrib
+
+[squeeze-security/non-free]
+precedence = 45
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main
+distro = squeeze/updates
 arch = amd64
 area = non-free
 
