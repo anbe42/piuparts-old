@@ -38,6 +38,7 @@ sections =
 	wheezy-ipi/main
 	wheezy-pu/main
 	squeeze/main
+	squeeze-ipi/main
 	squeeze-security/main
 	squeeze-updates/main
 	squeeze-pu/main
@@ -67,6 +68,7 @@ sections =
 	wheezy-ipi/contrib
 	wheezy-pu/contrib
 	squeeze/contrib
+	squeeze-ipi/contrib
 	squeeze-security/contrib
 	squeeze-updates/contrib
 	squeeze-pu/contrib
@@ -93,6 +95,7 @@ sections =
 	wheezy-ipi/non-free
 	wheezy-pu/non-free
 	squeeze/non-free
+	squeeze-ipi/non-free
 	squeeze-security/non-free
 	squeeze-updates/non-free
 	squeeze-pu/non-free
@@ -654,6 +657,49 @@ piuparts-flags =
 	%(flags-default)s
 depends-sections = wheezy-ipi/main wheezy-ipi/contrib
 distro = wheezy
+arch = amd64
+area = non-free
+
+
+[squeeze-ipi/main]
+precedence = 195
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, installation, removal, and purge test.
+piuparts-flags =
+	--install-purge-install
+	--install-remove-install
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+	-i /etc/fonts/conf.d/30-defoma.conf
+distro = squeeze
+arch = amd64
+area = main
+
+[squeeze-ipi/contrib]
+precedence = 195
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, installation, removal, and purge test.
+piuparts-flags = --warn-on-leftovers-after-purge --install-purge-install --install-remove-install --scriptsdir /etc/piuparts/scripts-squeeze
+	--install-purge-install
+	--install-remove-install
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze-ipi/main squeeze-ipi/non-free
+distro = squeeze
+arch = amd64
+area = contrib
+
+[squeeze-ipi/non-free]
+precedence = 195
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, installation, removal, and purge test.
+piuparts-flags =
+	--install-purge-install
+	--install-remove-install
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze-ipi/main squeeze-ipi/contrib
+distro = squeeze
 arch = amd64
 area = non-free
 
