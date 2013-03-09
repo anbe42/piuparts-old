@@ -1,0 +1,67 @@
+#
+# This is the configuration file for piuparts in master-slave mode as run by AnBe.
+#
+
+[DEFAULT]
+flags-default =
+	--allow-database
+	--warn-on-leftovers-after-purge
+flags-leftovers =
+	--allow-database
+	--scriptsdir /etc/piuparts/scripts-leftovers
+
+[global]
+# sections may be wrapped with continuation lines being indented
+# and may contain non-indented comments between continuation lines
+sections =
+#
+#
+#
+proxy = http://localhost:3128
+#
+mirror = http://ftp.de.debian.org/debian
+#
+master-host = localhost
+#
+master-user = piupartsm
+master-command = /org/piuparts.debian.org/share/piuparts/piuparts-master
+piuparts-command =
+	sudo
+	nice
+	env PYTHONPATH=%(PYTHONPATH)s
+	timeout -s INT -k 5m 40m
+	/org/piuparts.debian.org/sbin/piuparts
+	--skip-logrotatefiles-test
+	--warn-on-others
+	--scriptsdir /etc/piuparts/scripts
+PYTHONPATH = /org/piuparts.debian.org/lib/python2.6/dist-packages:/org/piuparts.debian.org/lib/python2.7/dist-packages
+master-directory = /org/piuparts.debian.org/master
+slave-directory = /org/piuparts.debian.org/slave
+basetgz-directory = /org/piuparts.debian.org/slave/basetgz
+output-directory = /org/piuparts.debian.org/htdocs
+known-problem-directory = /org/piuparts.debian.org/share/piuparts/known_problems
+backup-directory = /org/piuparts.debian.org/backup
+tmpdir = /tmp/piupartss
+slave-load-max = 9.5
+idle-sleep = 1800
+max-tgz-age = 0
+max-reserved = 50
+reschedule-untestable-days = 3
+expire-old-days = 120
+reschedule-old-days = 90
+reschedule-old-count = 2500
+expire-fail-days = 8
+reschedule-fail-days = 5
+reschedule-fail-count = 100
+
+
+############################################################################
+###  Install, remove, and purge tests.                                   ###
+############################################################################
+
+
+
+############################################################################
+###  Install, distupgrade, remove, and purge tests.                      ###
+############################################################################
+
