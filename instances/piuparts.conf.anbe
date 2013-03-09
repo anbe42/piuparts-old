@@ -116,6 +116,9 @@ sections =
 	lenny2squeeze/non-free
 	len2squ2whe/non-free
 #
+	dmo/sid/main
+	dmo/sid/non-free
+#
 proxy = http://localhost:3128
 #
 mirror = http://ftp.de.debian.org/debian
@@ -1194,4 +1197,30 @@ depends-sections = sid2experimental/main sid/main sid/contrib sid/non-free
 arch = amd64
 area = non-free
 upgrade-test-distros = sid experimental
+
+
+############################################################################
+###  Other tests.                                                        ###
+############################################################################
+
+
+[dmo/sid/main]
+precedence = 40
+description = DMO sid / %(area)s: package installation, removal, and purge test.
+piuparts-flags =
+	%(flags-default)s
+depends-sections = sid/main sid/contrib sid/non-free dmo/sid/non-free
+distro = dmo-sid
+arch = amd64
+area = main
+
+[dmo/sid/non-free]
+precedence = 45
+description = DMO sid / %(area)s: package installation, removal, and purge test.
+piuparts-flags =
+	%(flags-default)s
+depends-sections = dmo/sid/main sid/main sid/contrib sid/non-free
+distro = dmo-sid
+arch = amd64
+area = non-free
 
