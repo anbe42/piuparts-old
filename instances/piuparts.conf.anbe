@@ -15,10 +15,13 @@ flags-leftovers =
 # and may contain non-indented comments between continuation lines
 sections =
 	sid/main
+	sid-lo/main
 #
 	sid/contrib
+	sid-lo/contrib
 #
 	sid/non-free
+	sid-lo/non-free
 #
 proxy = http://localhost:3128
 #
@@ -96,6 +99,42 @@ area = non-free
 arch = amd64
 reschedule-old-days = 30
 expire-old-days = 45
+
+
+[sid-lo/main]
+precedence = 30
+description = + Failing on leftovers after purge.
+piuparts-flags =
+	%(flags-leftovers)s
+distro = sid
+area = main
+arch = amd64
+reschedule-old-days = 60
+expire-old-days = 75
+
+[sid-lo/contrib]
+precedence = 45
+description = + Failing on leftovers after purge.
+piuparts-flags =
+	%(flags-leftovers)s
+depends-sections = sid-lo/main sid-lo/non-free
+distro = sid
+area = contrib
+arch = amd64
+reschedule-old-days = 60
+expire-old-days = 75
+
+[sid-lo/non-free]
+precedence = 45
+description = + Failing on leftovers after purge.
+piuparts-flags =
+	%(flags-leftovers)s
+depends-sections = sid-lo/main sid-lo/contrib
+distro = sid
+area = non-free
+arch = amd64
+reschedule-old-days = 60
+expire-old-days = 75
 
 
 ############################################################################
