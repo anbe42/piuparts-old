@@ -43,6 +43,7 @@ sections =
 	squeeze2pu2wheezy/main
 	squeeze2wheezy/main
 	squeeze2wheezy-pu/main
+	squeeze2wheezyTEST/main
 	lenny/main
 	lenny2squeeze/main
 #
@@ -652,6 +653,23 @@ distro = squeeze
 upgrade-test-distros = squeeze wheezy
 reschedule-old-days = 30
 expire-old-days = 45
+
+[squeeze2wheezyTEST/main]
+precedence = 50
+description = + Wheezy has been enhanced with some modified packages.
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	--do-not-verify-signatures
+	--bindmount /tmp/s2w-TEST06
+	--testdebs-repo /tmp/s2w-TEST06
+	--distupgrade-to-testdebs
+	--scriptsdir /etc/piuparts/scripts-debug-problemresolver
+	-i /usr/share/doc/gcc-4.7-base/changelog.Debian.gz
+arch = amd64
+area = main
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
 
 [squeeze2wheezy/contrib]
 precedence = 95
