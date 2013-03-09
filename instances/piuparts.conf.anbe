@@ -16,6 +16,7 @@ flags-leftovers =
 sections =
 	sid/main
 	sid-lo/main
+	sid-bl/main
 #
 	sid/contrib
 	sid-lo/contrib
@@ -135,6 +136,17 @@ area = non-free
 arch = amd64
 reschedule-old-days = 60
 expire-old-days = 75
+
+
+[sid-bl/main]
+precedence = 30
+description = + Failing on broken symlinks.
+piuparts-flags =
+	%(flags-default)s
+	--fail-on-broken-symlinks
+distro = sid
+area = main
+arch = amd64
 
 
 ############################################################################
