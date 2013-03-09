@@ -47,6 +47,7 @@ sections =
 	squeeze2wheezy-apt/main
 	squeeze2wheezy-apt2/main
 	squeeze2wheezy2sid/main
+	testing2sid/main
 	lenny/main
 	lenny2squeeze/main
 #
@@ -65,6 +66,7 @@ sections =
 	squeeze2wheezy/contrib
 	squeeze2wheezy-pu/contrib
 	squeeze2wheezy2sid/contrib
+	testing2sid/contrib
 	lenny/contrib
 	lenny2squeeze/contrib
 #
@@ -83,6 +85,7 @@ sections =
 	squeeze2wheezy/non-free
 	squeeze2wheezy-pu/non-free
 	squeeze2wheezy2sid/non-free
+	testing2sid/non-free
 	lenny/non-free
 	lenny2squeeze/non-free
 #
@@ -799,4 +802,37 @@ arch = amd64
 area = non-free
 distro = squeeze
 upgrade-test-distros = squeeze wheezy sid
+
+
+[testing2sid/main]
+precedence = 60
+piuparts-flags =
+	%(flags-default)s
+arch = amd64
+area = main
+distro = testing
+upgrade-test-distros = testing sid
+reschedule-old-count = 0
+
+[testing2sid/contrib]
+precedence = 95
+piuparts-flags =
+	%(flags-default)s
+depends-sections = testing2sid/main testing2sid/non-free
+arch = amd64
+area = contrib
+distro = testing
+upgrade-test-distros = testing sid
+reschedule-old-count = 0
+
+[testing2sid/non-free]
+precedence = 95
+piuparts-flags =
+	%(flags-default)s
+depends-sections = testing2sid/main testing2sid/contrib
+arch = amd64
+area = non-free
+distro = testing
+upgrade-test-distros = testing sid
+reschedule-old-count = 0
 
