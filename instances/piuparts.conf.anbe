@@ -44,6 +44,7 @@ sections =
 	squeeze2wheezy/main
 	squeeze2wheezy-pu/main
 	squeeze2wheezyTEST/main
+	squeeze2wheezy-apt/main
 	lenny/main
 	lenny2squeeze/main
 #
@@ -666,6 +667,20 @@ piuparts-flags =
 	--distupgrade-to-testdebs
 	--scriptsdir /etc/piuparts/scripts-debug-problemresolver
 	-i /usr/share/doc/gcc-4.7-base/changelog.Debian.gz
+arch = amd64
+area = main
+distro = squeeze
+upgrade-test-distros = squeeze wheezy
+
+[squeeze2wheezy-apt/main]
+precedence = 50
+description = + Using a backported apt from wheezy to perform the upgrade.
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	--scriptsdir /etc/piuparts/scripts-debug-problemresolver
+	--bindmount /tmp/apt4squeeze
+	--scriptsdir /etc/piuparts/scripts-apt-first
 arch = amd64
 area = main
 distro = squeeze
