@@ -206,13 +206,14 @@ class Slave:
             user = self._master_user + "@"
         else:
             user = ""
-        ssh_cmdline = "cd %s; %s %s 2> %s.$$ && rm %s.$$" % \
+        ssh_cmdline = "cd %s; %s 2> %s.$$ && rm %s.$$" % \
                       (self._master_directory or ".",
-                      self._master_command, self._section, log_file, log_file)
+                      self._master_command, log_file, log_file)
         p = subprocess.Popen(["ssh", "-x", user + self._master_host, ssh_cmdline],
                        stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         self._to_master = p.stdin
         self._from_master = p.stdout
+        self._writeline("section " + self._section)
         line = self._readline()
         if line == "busy\n":
             raise MasterIsBusy()

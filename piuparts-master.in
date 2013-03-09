@@ -30,8 +30,8 @@ get_config_value PYTHONPATH global PYTHONPATH ''
 
 export PYTHONPATH
 
-section="$1"
-if [ -z "$section" ]; then
+read command section
+if [ "$command" != "section" ] || [ -z "$section" ]; then
 	echo "FAIL: no section supplied"
 	exit 1
 fi

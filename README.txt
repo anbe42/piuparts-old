@@ -328,6 +328,7 @@ A sample session (">>" indicates what the slave sends, "<<" what
 the master responds with):
 
 ----
+>> section sid
 << hello
 >> pass liwc 1.2.3-4
 >>  The piuparts
@@ -344,10 +345,18 @@ version 1.2.3-4, and sends the piuparts log file for it. Then it
 reserves a new package to test and the master gives it
 vorbisgain, version 2.3-4.
 
-The communication always starts with the master saying "hello".
-The slave shall not speak until the master has spoken.
+The communication always starts with the slave requesting a
+section name and the master saying "hello".
 
 Commands and responses in this protocol:
+
+----
+Command: section <string>
+Success: hello
+Failure: error
+----
+Slave asks master to switch to the given section.
+This must be the very first command sent by the slave.
 
 ----
 Command: recycle
@@ -519,8 +528,6 @@ section, too, and will serve as defaults for all other sections
  the master. When the master has been installed from the Debian
  package, the command is
  '/usr/share/piuparts/piuparts-master'.
- The section name will be given as a command line argument to this
- command.
 
 * "idle-sleep" is the length of time the slave should wait before
  querying the master again if the master didn't have any new

@@ -49,6 +49,11 @@ for 0.5x:
 
 for 0.6x:
 
+- implement the section command in piuparts-master-backend instead of the
+  wrapper
+- enhance piuparts-master + protocal to allow switching to different
+  sections without disconnecting inbetween (useful to reduce the number
+  of ssh connections while searching for a non-idle section).
 
 - generate piuparts.1.txt automatically from piuparts.py - see this blog post
   for a nice howto:
