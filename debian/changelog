@@ -57,6 +57,8 @@ piuparts (0.50) UNRELEASED; urgency=low
     slave. The wrapper gets the master-directory and logfile from
     piuparts.conf and handles the directory switching and error logging.
     The section is read from stdin instead of using a command line argument.
+  * Allow the master-command to be set in ~piupartsm/.ssh/authorized_keys to
+    restrict ssh keys to only run piuparts-master.
   * piuparts-slave.py:
     - Tarball recreation can be disabled by setting max-tgz-age to 0.
     - Relax package existence checks to allow distupgrading to backports.
@@ -104,6 +106,8 @@ piuparts (0.50) UNRELEASED; urgency=low
   * piuparts-slave.deb:
     - Use /var/cache/piuparts/tmp as tmpdir.
     - Use /var/cache/piuparts/basetgz as basetgz-directory.
+    - Restrict the ssh key added to master's authorized_keys to only run
+      piuparts-master.
   * slave_{run,join}: Rename the screen session to "piuparts_slave_screen".
   * slave_cleanup: Use pgrep to find running piuparts-slave processes.
   * slave_{run,join}: Use screen -ls to find running screen sessions.
