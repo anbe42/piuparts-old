@@ -28,6 +28,7 @@ sections =
 	squeeze/main
 	squeeze-security/main
 	squeeze-updates/main
+	squeeze-pu/main
 #
 	experimental/contrib
 	sid/contrib
@@ -37,6 +38,7 @@ sections =
 	squeeze/contrib
 	squeeze-security/contrib
 	squeeze-updates/contrib
+	squeeze-pu/contrib
 #
 	experimental/non-free
 	sid/non-free
@@ -46,6 +48,7 @@ sections =
 	squeeze/non-free
 	squeeze-security/non-free
 	squeeze-updates/non-free
+	squeeze-pu/non-free
 #
 proxy = http://localhost:3128
 #
@@ -371,6 +374,40 @@ piuparts-flags =
 	%(flags-end-squeeze)s
 depends-sections = squeeze/main
 distro = squeeze-updates
+arch = amd64
+area = non-free
+
+
+[squeeze-pu/main]
+precedence = 20
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main
+distro = squeeze-proposed-updates
+arch = amd64
+area = main
+
+[squeeze-pu/contrib]
+precedence = 45
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main squeeze/non-free
+distro = squeeze-proposed-updates
+arch = amd64
+area = contrib
+
+[squeeze-pu/non-free]
+precedence = 45
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main squeeze/contrib
+distro = squeeze-proposed-updates
 arch = amd64
 area = non-free
 
