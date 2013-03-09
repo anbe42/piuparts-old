@@ -49,6 +49,7 @@ sections =
 	squeeze2wheezy2sid/main
 	squeeze2sid/main
 	testing2sid/main
+	sid2experimental/main
 	lenny/main
 	lenny2squeeze/main
 #
@@ -69,6 +70,7 @@ sections =
 	squeeze2wheezy2sid/contrib
 	squeeze2sid/contrib
 	testing2sid/contrib
+	sid2experimental/contrib
 	lenny/contrib
 	lenny2squeeze/contrib
 #
@@ -89,6 +91,7 @@ sections =
 	squeeze2wheezy2sid/non-free
 	squeeze2sid/non-free
 	testing2sid/non-free
+	sid2experimental/non-free
 	lenny/non-free
 	lenny2squeeze/non-free
 #
@@ -871,4 +874,32 @@ area = non-free
 distro = testing
 upgrade-test-distros = testing sid
 reschedule-old-count = 0
+
+
+[sid2experimental/main]
+precedence = 70
+piuparts-flags =
+	%(flags-default)s
+depends-sections = sid/main
+arch = amd64
+area = main
+upgrade-test-distros = sid experimental
+
+[sid2experimental/contrib]
+precedence = 95
+piuparts-flags =
+	%(flags-default)s
+depends-sections = sid2experimental/main sid/main sid/contrib sid/non-free
+arch = amd64
+area = contrib
+upgrade-test-distros = sid experimental
+
+[sid2experimental/non-free]
+precedence = 95
+piuparts-flags =
+	%(flags-default)s
+depends-sections = sid2experimental/main sid/main sid/contrib sid/non-free
+arch = amd64
+area = non-free
+upgrade-test-distros = sid experimental
 
