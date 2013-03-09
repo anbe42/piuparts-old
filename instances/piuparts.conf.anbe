@@ -39,6 +39,7 @@ sections =
 	squeeze-updates/main
 	squeeze-pu/main
 	squeeze-backports/main
+	squeeze2pu/main
 	lenny/main
 	lenny2squeeze/main
 #
@@ -52,6 +53,7 @@ sections =
 	squeeze-updates/contrib
 	squeeze-pu/contrib
 	squeeze-backports/contrib
+	squeeze2pu/contrib
 	lenny/contrib
 	lenny2squeeze/contrib
 #
@@ -65,6 +67,7 @@ sections =
 	squeeze-updates/non-free
 	squeeze-pu/non-free
 	squeeze-backports/non-free
+	squeeze2pu/non-free
 	lenny/non-free
 	lenny2squeeze/non-free
 #
@@ -549,4 +552,44 @@ area = non-free
 distro = lenny
 upgrade-test-distros = lenny squeeze
 reschedule-old-count = 0
+
+
+[squeeze2pu/main]
+precedence = 60
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main
+arch = amd64
+area = main
+upgrade-test-distros = squeeze squeeze-proposed-updates
+reschedule-old-days = 30
+expire-old-days = 45
+
+[squeeze2pu/contrib]
+precedence = 95
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main
+arch = amd64
+area = contrib
+upgrade-test-distros = squeeze squeeze-proposed-updates
+reschedule-old-days = 30
+expire-old-days = 45
+
+[squeeze2pu/non-free]
+precedence = 95
+piuparts-flags =
+	%(flags-default)s
+	%(flags-start-squeeze)s
+	%(flags-end-squeeze)s
+depends-sections = squeeze/main
+arch = amd64
+area = non-free
+upgrade-test-distros = squeeze squeeze-proposed-updates
+reschedule-old-days = 30
+expire-old-days = 45
 
