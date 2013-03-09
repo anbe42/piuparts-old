@@ -54,8 +54,9 @@ piuparts (0.50) UNRELEASED; urgency=low
     - Load depends-sections for package lookup in partial distros.
   * Rename piuparts-master.py to piuparts-master-backend.py and add a shell
     wrapper script piuparts-master to simplify calling the master from the
-    slave. The wrapper reads the section from stdin instead of using a command
-    line argument.
+    slave. The wrapper gets the master-directory and logfile from
+    piuparts.conf and handles the directory switching and error logging.
+    The section is read from stdin instead of using a command line argument.
   * piuparts-slave.py:
     - Tarball recreation can be disabled by setting max-tgz-age to 0.
     - Relax package existence checks to allow distupgrading to backports.
@@ -74,6 +75,7 @@ piuparts (0.50) UNRELEASED; urgency=low
       Drop support for running both tests for a section.
     - Pass the section to piuparts-master via stdin instead of using a command
       line argument.
+    - Let the piuparts-master (wrapper script) handle chdir and error logging.
   * piuparts-analyze.py:
     - Add support for magic "$DISTRO/None" versions.
   * piuparts-report.py:
