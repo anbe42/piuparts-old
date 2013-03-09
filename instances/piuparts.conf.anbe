@@ -33,6 +33,7 @@ sections =
 	sid-lo/main
 	sid-bl/main
 	sid-iri/main
+	sid-ipi/main
 	wheezy/main
 	wheezy-pu/main
 	squeeze/main
@@ -60,6 +61,7 @@ sections =
 	sid/contrib
 	sid-lo/contrib
 	sid-iri/contrib
+	sid-ipi/contrib
 	wheezy/contrib
 	wheezy-pu/contrib
 	squeeze/contrib
@@ -84,6 +86,7 @@ sections =
 	sid/non-free
 	sid-lo/non-free
 	sid-iri/non-free
+	sid-ipi/non-free
 	wheezy/non-free
 	wheezy-pu/non-free
 	squeeze/non-free
@@ -578,6 +581,42 @@ area = non-free
 arch = amd64
 reschedule-old-days = 60
 expire-old-days = 75
+
+
+[sid-ipi/main]
+precedence = 175
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, and purge test.
+piuparts-flags =
+	--install-purge-install
+	--warn-on-leftovers-after-purge
+	%(flags-leftovers)s
+distro = sid
+area = main
+arch = amd64
+
+[sid-ipi/contrib]
+precedence = 175
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, and purge test.
+piuparts-flags =
+	--install-purge-install
+	--warn-on-leftovers-after-purge
+	%(flags-leftovers)s
+depends-sections = sid-ipi/main sid-ipi/non-free
+distro = sid
+area = contrib
+arch = amd64
+
+[sid-ipi/non-free]
+precedence = 175
+description = Debian %(distro)s / %(area)s: package installation, purge, installation, removal, and purge test.
+piuparts-flags =
+	--install-purge-install
+	--warn-on-leftovers-after-purge
+	%(flags-leftovers)s
+depends-sections = sid-ipi/main sid-ipi/contrib
+distro = sid
+area = non-free
+arch = amd64
 
 
 ############################################################################
