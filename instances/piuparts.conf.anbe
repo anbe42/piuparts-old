@@ -32,6 +32,7 @@ sections =
 	sid/main
 	sid-lo/main
 	sid-bl/main
+	sid-iri/main
 	wheezy/main
 	wheezy-pu/main
 	squeeze/main
@@ -58,6 +59,7 @@ sections =
 	experimental/contrib
 	sid/contrib
 	sid-lo/contrib
+	sid-iri/contrib
 	wheezy/contrib
 	wheezy-pu/contrib
 	squeeze/contrib
@@ -81,6 +83,7 @@ sections =
 	experimental/non-free
 	sid/non-free
 	sid-lo/non-free
+	sid-iri/non-free
 	wheezy/non-free
 	wheezy-pu/non-free
 	squeeze/non-free
@@ -531,6 +534,50 @@ distro = lenny
 arch = amd64
 area = non-free
 reschedule-old-count = 0
+
+
+############################################################################
+###  Install, remove, (purge), install, remove, and purge tests.         ###
+############################################################################
+
+
+[sid-iri/main]
+precedence = 175
+description = Debian %(distro)s / %(area)s: package installation, removal, installation, removal, and purge test.
+piuparts-flags =
+	--install-remove-install
+	%(flags-default)s
+distro = sid
+area = main
+arch = amd64
+reschedule-old-days = 60
+expire-old-days = 75
+
+[sid-iri/contrib]
+precedence = 175
+description = Debian %(distro)s / %(area)s: package installation, removal, installation, removal, and purge test.
+piuparts-flags =
+	--install-remove-install
+	%(flags-default)s
+depends-sections = sid-iri/main sid-iri/non-free
+distro = sid
+area = contrib
+arch = amd64
+reschedule-old-days = 60
+expire-old-days = 75
+
+[sid-iri/non-free]
+precedence = 175
+description = Debian %(distro)s / %(area)s: package installation, removal, installation, removal, and purge test.
+piuparts-flags = --warn-on-leftovers-after-purge
+	--install-remove-install
+	%(flags-default)s
+depends-sections = sid-iri/main sid-iri/contrib
+distro = sid
+area = non-free
+arch = amd64
+reschedule-old-days = 60
+expire-old-days = 75
 
 
 ############################################################################
